@@ -1,0 +1,27 @@
+{
+    "creds": {
+        "data": {
+            "user": "pranav",
+            "port": 8098, 
+            "type": "env",
+            "val": "DATA_PWD"
+        },
+        "compute": {
+            "user": "pbhandar",
+            "type": "file",
+            "val": "/Users/pranavbhandari/.ssh/id_ed25519"
+        }
+    },
+    "nodes": {
+        "compute0": {
+            "host": "c220g1-030825.wisc.cloudlab.us",
+            "cred": "compute"
+        },
+        "data0": {
+            "host": "mjolnir.mathcs.emory.edu",
+            "cred": "data"
+        }
+    },
+    "compute": ["compute0"],
+    "data": ["data0"]
+}

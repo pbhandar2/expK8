@@ -1,0 +1,1 @@
+This directory contains code that was used to manage a large set of experiments for a research project. 

@@ -1,0 +1,27 @@
+{
+    "creds": {
+        "data": {
+            "user": "pranav",
+            "port": 8098, 
+            "type": "env",
+            "val": "DATA_PWD"
+        },
+        "compute": {
+            "user": "pbhandar",
+            "type": "file",
+            "val": "/myhome/.ssh/mypubkey"
+        }
+    },
+    "nodes": {
+        "compute0": {
+            "host": "compute0.somewhere.in.cloud.com",
+            "cred": "compute"
+        },
+        "data0": {
+            "host": "data0.somewhere.in.cloud.com",
+            "cred": "data"
+        }
+    },
+    "compute": ["compute0"],
+    "data": ["data0"]
+}

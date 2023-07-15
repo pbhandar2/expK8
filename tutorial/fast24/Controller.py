@@ -6,4 +6,4 @@ from expK8.controller import Server
 
 class ControllerServer:
     def __init__(self) -> None:
-        pass 
+        self.server = Server()

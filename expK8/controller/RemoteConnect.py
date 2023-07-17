@@ -14,17 +14,12 @@ Ref: https://docs.paramiko.org/en/stable/api/channel.html (last checked 16/07/20
 """
 class ExecCommandThread(Thread):
     def __init__(self, ssh_client, command_str_arr):
-        # execute the base constructor
         Thread.__init__(self)
-        # set a default value
         self.ssh_client = ssh_client
         self.command_str_arr = command_str_arr
-        self.value = None
- 
-    # function executed in a new thread
+
     def run(self):
         _, stdout, stderr = self.ssh_client.exec_command(" ".join(self.command_str_arr))
-        # store data in an instance variable
         self.stdout = stdout.read().decode("utf-8")
         self.stderr = stderr.read().decode("utf-8")
         self.exit_code = stdout.channel.recv_exit_status()

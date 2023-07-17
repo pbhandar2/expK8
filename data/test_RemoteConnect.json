@@ -14,7 +14,7 @@
     },
     "nodes": {
         "compute0": {
-            "host": "c220g1-030825.wisc.cloudlab.us",
+            "host": "c220g5-111231.wisc.cloudlab.us",
             "cred": "compute"
         },
         "data0": {

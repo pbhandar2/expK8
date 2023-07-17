@@ -426,15 +426,7 @@ class RemoteConnect:
         target_data_str = "{}@{}:{}".format(self._config["creds"][cred_name]["user"], target_host_name, target_path)
         scp_cmd.append(target_data_str)
 
-        for _ in range(num_retry):
-            stdout, stderr, exit_code = self.exec_command(source_host_name, scp_cmd, timeout=timeout)
-            if not exit_code:
-                if _ > 0:
-                    print("SCP completed in {} tries.".format(_))
-                break 
-            else:
-                print("SCP failed. Retry remaining: {} \n {} \n {}".format(num_retry-_-1), stdout, stderr)
-        
+        stdout, stderr, exit_code = self.exec_command(source_host_name, scp_cmd, timeout=timeout, num_retry=num_retry)        
         if not self.remote_path_exists(target_host_name, target_path) or exit_code:
             raise RemoteRuntimeError(scp_cmd, source_host_name, exit_code, stdout, stderr)
 

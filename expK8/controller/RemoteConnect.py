@@ -152,7 +152,7 @@ class RemoteConnect:
             command_str_arr: list[str],
             timeout: float = None,
             num_retry: int = 5
-    ) -> tuple[int, str, str]:
+    ) -> tuple[str, str, int]:
         """Run a command in the node with a given name. 
 
         Args:
@@ -161,7 +161,7 @@ class RemoteConnect:
             timeout: Seconds to wait before before a remote command times out. 
         
         Return:
-            The result of running the command on remote node represented by a tuple of (exit code, stdout, stderr). 
+            The result of running the command on remote node represented by a tuple of (stdout, stderr, exit code). 
 
         Raises:
             SSHException: if the sever fails to execute the command

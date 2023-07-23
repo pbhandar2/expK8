@@ -1,0 +1,11 @@
+{
+    "install": {
+        "script": "scirpt.sh",
+        "cmd": ["./script.sh"]
+    }
+    "experiments": [
+        {
+            "workload": "",
+        }
+    ]
+}

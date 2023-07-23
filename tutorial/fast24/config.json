@@ -9,16 +9,20 @@
         "compute": {
             "user": "pbhandar",
             "type": "file",
-            "val": "/myhome/.ssh/mypubkey"
+            "val": "/Users/pranavbhandari/.ssh/id_ed25519"
         }
     },
     "nodes": {
         "compute0": {
-            "host": "compute0.somewhere.in.cloud.com",
+            "host": "c220g5-110529.wisc.cloudlab.us",
+            "cred": "compute"
+        },
+        "compute1": {
+            "host": "c220g5-110531.wisc.cloudlab.us",
             "cred": "compute"
         },
         "data0": {
-            "host": "data0.somewhere.in.cloud.com",
+            "host": "mjolnir.mathcs.emory.edu",
             "cred": "data"
         }
     },

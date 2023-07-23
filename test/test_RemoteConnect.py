@@ -1,10 +1,11 @@
-"""This test of RemoteConnect class uses the file "test_RemoteConnect.json" as the configuration 
-file. Update the file to include a remote node that you have access to along with the credentials 
-required to connect to it. 
+"""These tests check the ability of RemoteConnect to communicate with remote nodes and make remote nodes 
+communicate with each other. We use a config file "test_RemoteConnect.json" in the data directory. Please 
+update this test file with nodes you have access to in order to test RemoteConnect yourself. 
 """
 
 import unittest
 import json 
+import pprint 
 from pathlib import Path
 from expK8.controller.RemoteConnect import RemoteConnect
 
@@ -20,7 +21,7 @@ class TestRemoteConnect(unittest.TestCase):
     def test_connect(self):
         """ Test that the nodes listed in the test config are all connected. """
         node_status = remote_connect.get_node_status()
-        assert node_status and not remote_connect._unresponsive
+        assert node_status and not remote_connect._unresponsive, print(remote_connect._unresponsive)
         for hostname in node_status:
             assert node_status[hostname]
     
@@ -29,6 +30,12 @@ class TestRemoteConnect(unittest.TestCase):
         """ Test if we are able to run commands in remote nodes. """
         stdout, stderr, exit_code = remote_connect.exec_command(test_config["nodes"]["compute0"]["host"], ["ls", "-lh"])
         assert not len(stderr) and len(stdout) and not exit_code
+
+    
+    def test_lsblk(self):
+        """ Test if we are able to get a dictionary of block devices in remote nodes. """
+        block_device_dict = remote_connect.lsblk(test_config["nodes"]["compute0"]["host"])
+        print(pprint.pprint(block_device_dict))
 
 
     def test_transfer_data(self):

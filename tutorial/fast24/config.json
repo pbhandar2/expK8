@@ -1,31 +1,42 @@
 {
+    "mounts": {
+        "c220g1": [
+            {
+                "mountpoint": "~/disk",
+                "device": "sdc",
+                "size_gb": 950
+            },
+            {
+                "mountpoint": "~/nvm",
+                "device": "sdb",
+                "size_gb": 420
+            }
+        ],
+        "c220g5": [
+            {
+                "mountpoint": "~/disk",
+                "device": "sdb",
+                "size_gb": 950
+            },
+            {
+                "mountpoint": "~/nvm",
+                "device": "sda4",
+                "size_gb": 420 
+            }
+        ]
+    },
     "creds": {
-        "data": {
-            "user": "pranav",
-            "port": 8098, 
-            "type": "env",
-            "val": "DATA_PWD"
-        },
-        "compute": {
+        "cloudlab": {
             "user": "pbhandar",
             "type": "file",
             "val": "/Users/pranavbhandari/.ssh/id_ed25519"
         }
     },
     "nodes": {
-        "compute0": {
-            "host": "c220g5-110529.wisc.cloudlab.us",
-            "cred": "compute"
-        },
-        "compute1": {
-            "host": "c220g5-110531.wisc.cloudlab.us",
-            "cred": "compute"
-        },
-        "data0": {
-            "host": "mjolnir.mathcs.emory.edu",
-            "cred": "data"
+        "c220g5-25": {
+            "host": "c220g5-120127.wisc.cloudlab.us",
+            "cred": "cloudlab",
+            "mount": "c220g5"
         }
-    },
-    "compute": ["compute0"],
-    "data": ["data0"]
+    }
 }

@@ -1,5 +1,6 @@
 from abc import ABC 
-from expK8.controller import RemoteConnect
+from expK8.remoteFS import RemoteFS
+from pathlib import Path 
 
 
 class Experiment(ABC):
@@ -7,16 +8,16 @@ class Experiment(ABC):
 
     Attributes:
         name: Name used to generate output and track status. 
-        remote_connect: RemoteConnect to communicate to remote nodes and make them communicate to each other. 
+        remoteFS: RemoteFS to communicate to remote nodes and make them communicate to each other. 
         _logger: Logger that updates the log file related to this experiment. 
     """
     def __init__(
             self,
             name, 
-            remote_connect: RemoteConnect
+            remoteFS: RemoteFS
     ) -> None:
         self.name = name 
-        self.remote_connect = remote_connect
+        self.remoteFS = remoteFS
     
 
     def setup(self):

@@ -440,7 +440,7 @@ class Node:
                 break 
             else:
                 if "children" not in cur_block_device_info:
-                    break 
+                    continue 
 
                 for partition_info in cur_block_device_info["children"]:
                     if partition_info["mountpoint"] == mount_path:
@@ -489,11 +489,7 @@ class Node:
             device_name = mount_info["device"]
             mount_size_gb = mount_info["size_gb"]
             mount_path = self.format_path(mount_info["mountpoint"])
-
             block_device_info = self._get_block_device(device_name)
-            block_device_size_gb = int(block_device_info["size"]/(1024**3))
-            if mount_size_gb > block_device_size_gb:
-                raise NoValidPartitionFound(self.host, mount_info, block_device_info)
             
             self.mkdir(mount_path)
             self.chown(mount_path)

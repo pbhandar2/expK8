@@ -52,7 +52,9 @@ def transfer_complete_experiment(
                 node.download(remote_output_file_path, local_output_file_path)
             
             remote_file_size_byte = node.get_file_size(remote_output_file_path)
-            local_file_size_byte = local_output_file_path.stat().st_size
+            local_file_size_byte = 0 
+            if local_output_file_path.exists():
+                local_file_size_byte = local_output_file_path.stat().st_size
 
             assert remote_file_size_byte == local_file_size_byte, \
                 "The output file size of remote file {} {} and local file {} {} did not match.".format(
@@ -230,6 +232,7 @@ def runFAST24(machine_type: str) -> None:
         block_trace_path = Path(exp['block_trace_path']) 
         if not block_trace_path.exists():
             exp_status["status"] = "Trace not found."
+            exp_status["block_trace_path"] = "/".join(exp_status["block_trace_path"].split("/")[-3:])
             exp_status_arr.append(exp_status)
             continue 
 
@@ -243,10 +246,12 @@ def runFAST24(machine_type: str) -> None:
             if len(output_file_list) == 1:
                 # Live experiment
                 exp_status["status"] = "Running in {}".format(host.split(".")[0])
+                exp_status["block_trace_path"] = "/".join(exp_status["block_trace_path"].split("/")[-3:])
                 exp_status_arr.append(exp_status)
             else:
                 # Complete experiment 
                 exp_status["status"] = "Completed in {} with {} files.".format(host.split(".")[0], len(output_file_list))
+                exp_status["block_trace_path"] = "/".join(exp_status["block_trace_path"].split("/")[-3:])
                 exp_status_arr.append(exp_status)
             
             continue 
@@ -263,9 +268,11 @@ def runFAST24(machine_type: str) -> None:
         if is_replay_running(free_node):
             exp_output_db.init_output_dir(machine_type, exp, free_node.host)
             exp_status["status"] = "Started in {}".format(free_node.host)
+            exp_status["block_trace_path"] = "/".join(exp_status["block_trace_path"].split("/")[-3:])
             exp_status_arr.append(exp_status)
         else:
             exp_status["status"] = "Failed in {}".format(free_node.host)
+            exp_status["block_trace_path"] = "/".join(exp_status["block_trace_path"].split("/")[-3:])
             exp_status_arr.append(exp_status)
 
         df = DataFrame(exp_status_arr)
@@ -276,7 +283,10 @@ def runFAST24(machine_type: str) -> None:
     
         
 if __name__ == "__main__":
-    parser = ArgumentParser("Run set of replays for FAST 24.")
+    parser = ArgumentParser("Run block trace replay in remote nodes.")
+
     parser.add_argument("machine_type", type=str, help="Type of machine to run replays on.")
+
     args = parser.parse_args()
+
     runFAST24(args.machine_type)

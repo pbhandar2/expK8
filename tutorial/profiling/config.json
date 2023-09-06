@@ -15,16 +15,15 @@
         "c220g5": [
             {
                 "mountpoint": "~/disk",
-                "device": "sdc",
+                "device": "sdb",
                 "size_gb": 950
             },
             {
                 "mountpoint": "~/nvm",
-                "device": "sdb",
+                "device": "sda4",
                 "size_gb": 420 
             }
-        ],
-        "r6525": []
+        ]
     },
     "creds": {
         "cloudlab": {
@@ -41,6 +40,16 @@
     "nodes": {
         "c220g1-0": {
             "host": "c220g1-031123.wisc.cloudlab.us",
+            "cred": "cloudlab-vish",
+            "mount": "c220g1"
+        },
+        "c220g1-1": {
+            "host": "c220g1-031115.wisc.cloudlab.us",
+            "cred": "cloudlab-vish",
+            "mount": "c220g1"
+        },
+        "c220g1-2": {
+            "host": "c220g1-031110.wisc.cloudlab.us",
             "cred": "cloudlab-vish",
             "mount": "c220g1"
         }

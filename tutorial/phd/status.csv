@@ -1,0 +1,37 @@
+num_block_threads,num_async_threads,max_pending_block_requests,t1_size_mb,t2_size_mb,replay_rate,block_trace_path,sample,iteration,status
+16,16,128,143,0,3,/research2/mtc/cp_traces/pranav/block_traces/test/w66.csv,0,0,Already Started in host c220g5-110509.wisc.cloudlab.us
+16,16,128,143,286,3,/research2/mtc/cp_traces/pranav/block_traces/test/w66.csv,0,0,Already Started in host c220g5-111004.wisc.cloudlab.us
+16,16,128,114,228,3,/research2/mtc/cp_traces/pranav/sample_block_traces/iat/test/w66/80_12_42.csv,1,0,Already Started in host c220g5-111003.wisc.cloudlab.us
+16,16,128,114,228,3,/research2/mtc/cp_traces/pranav/sample_block_traces/iat/test/w66/80_8_42.csv,1,0,Already Started in host c220g5-111215.wisc.cloudlab.us
+16,16,128,114,228,3,/research2/mtc/cp_traces/pranav/sample_block_traces/iat/test/w66/80_4_42.csv,1,0,Already Started in host c220g5-111201.wisc.cloudlab.us
+16,16,128,114,228,3,/research2/mtc/cp_traces/pranav/sample_block_traces/iat/test/w66/80_0_42.csv,1,0,Already Started in host c220g5-110501.wisc.cloudlab.us
+16,16,128,143,429,3,/research2/mtc/cp_traces/pranav/block_traces/test/w66.csv,0,0,Already Started in host c220g5-120120.wisc.cloudlab.us
+16,16,128,114,343,3,/research2/mtc/cp_traces/pranav/sample_block_traces/iat/test/w66/80_12_42.csv,1,0,Already Started in host c220g5-110428.wisc.cloudlab.us
+16,16,128,114,343,3,/research2/mtc/cp_traces/pranav/sample_block_traces/iat/test/w66/80_8_42.csv,1,0,Already Started in host c220g5-111310.wisc.cloudlab.us
+16,16,128,114,343,3,/research2/mtc/cp_traces/pranav/sample_block_traces/iat/test/w66/80_4_42.csv,1,0,Already Started in host c220g5-111221.wisc.cloudlab.us
+16,16,128,114,343,3,/research2/mtc/cp_traces/pranav/sample_block_traces/iat/test/w66/80_0_42.csv,1,0,Already Started in host c220g5-110426.wisc.cloudlab.us
+16,16,128,286,0,3,/research2/mtc/cp_traces/pranav/block_traces/test/w66.csv,0,0,Already Started in host c220g5-120107.wisc.cloudlab.us
+16,16,128,286,286,3,/research2/mtc/cp_traces/pranav/block_traces/test/w66.csv,0,0,Already Started in host c220g5-111318.wisc.cloudlab.us
+16,16,128,228,228,3,/research2/mtc/cp_traces/pranav/sample_block_traces/iat/test/w66/80_12_42.csv,1,0,Already Started in host c220g5-110918.wisc.cloudlab.us
+16,16,128,228,228,3,/research2/mtc/cp_traces/pranav/sample_block_traces/iat/test/w66/80_8_42.csv,1,0,Already Started in host c220g5-120105.wisc.cloudlab.us
+16,16,128,228,228,3,/research2/mtc/cp_traces/pranav/sample_block_traces/iat/test/w66/80_4_42.csv,1,0,Already Started in host c220g5-110417.wisc.cloudlab.us
+16,16,128,228,228,3,/research2/mtc/cp_traces/pranav/sample_block_traces/iat/test/w66/80_0_42.csv,1,0,Already Started in host c220g5-111011.wisc.cloudlab.us
+16,16,128,286,429,3,/research2/mtc/cp_traces/pranav/block_traces/test/w66.csv,0,0,Already Started in host c220g5-110526.wisc.cloudlab.us
+16,16,128,114,171,3,/research2/mtc/cp_traces/pranav/sample_block_traces/iat/test/w66/40_12_42.csv,1,0,Already Started in host c220g5-120122.wisc.cloudlab.us
+16,16,128,114,171,3,/research2/mtc/cp_traces/pranav/sample_block_traces/iat/test/w66/40_8_42.csv,1,0,Already Started in host c220g5-120108.wisc.cloudlab.us
+16,16,128,114,171,3,/research2/mtc/cp_traces/pranav/sample_block_traces/iat/test/w66/40_4_42.csv,1,0,Already Started in host c220g5-111331.wisc.cloudlab.us
+16,16,128,114,171,3,/research2/mtc/cp_traces/pranav/sample_block_traces/iat/test/w66/40_0_42.csv,1,0,Started in host c220g5-120132.wisc.cloudlab.us
+16,16,128,228,343,3,/research2/mtc/cp_traces/pranav/sample_block_traces/iat/test/w66/80_12_42.csv,1,0,Started in host c220g5-120125.wisc.cloudlab.us
+16,16,128,228,343,3,/research2/mtc/cp_traces/pranav/sample_block_traces/iat/test/w66/80_8_42.csv,1,0,Started in host c220g5-111003.wisc.cloudlab.us
+16,16,128,228,343,3,/research2/mtc/cp_traces/pranav/sample_block_traces/iat/test/w66/80_4_42.csv,1,0,Started in host c220g5-111215.wisc.cloudlab.us
+16,16,128,228,343,3,/research2/mtc/cp_traces/pranav/sample_block_traces/iat/test/w66/80_0_42.csv,1,0,Started in host c220g5-111226.wisc.cloudlab.us
+16,16,128,429,0,3,/research2/mtc/cp_traces/pranav/block_traces/test/w66.csv,0,0,Started in host c220g5-120110.wisc.cloudlab.us
+16,16,128,429,286,3,/research2/mtc/cp_traces/pranav/block_traces/test/w66.csv,0,0,Started in host c220g5-110428.wisc.cloudlab.us
+16,16,128,343,228,3,/research2/mtc/cp_traces/pranav/sample_block_traces/iat/test/w66/80_12_42.csv,1,0,Started in host c220g5-110422.wisc.cloudlab.us
+16,16,128,343,228,3,/research2/mtc/cp_traces/pranav/sample_block_traces/iat/test/w66/80_8_42.csv,1,0,Started in host c220g5-111310.wisc.cloudlab.us
+16,16,128,343,228,3,/research2/mtc/cp_traces/pranav/sample_block_traces/iat/test/w66/80_4_42.csv,1,0,Started in host c220g5-120121.wisc.cloudlab.us
+16,16,128,343,228,3,/research2/mtc/cp_traces/pranav/sample_block_traces/iat/test/w66/80_0_42.csv,1,0,Started in host c220g5-110918.wisc.cloudlab.us
+16,16,128,429,429,3,/research2/mtc/cp_traces/pranav/block_traces/test/w66.csv,0,0,Started in host c220g5-120115.wisc.cloudlab.us
+16,16,128,171,171,3,/research2/mtc/cp_traces/pranav/sample_block_traces/iat/test/w66/40_12_42.csv,1,0,Started in host c220g5-111019.wisc.cloudlab.us
+16,16,128,171,171,3,/research2/mtc/cp_traces/pranav/sample_block_traces/iat/test/w66/40_8_42.csv,1,0,Started in host c220g5-120122.wisc.cloudlab.us
+16,16,128,171,171,3,/research2/mtc/cp_traces/pranav/sample_block_traces/iat/test/w66/40_4_42.csv,1,0,Started in host c220g5-120108.wisc.cloudlab.us

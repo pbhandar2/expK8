@@ -1,33 +1,14 @@
 from pathlib import Path 
 
 
-class Config:
-    def __init__(self):
+class GlobalConfig:
+    def __init__(self) -> None:
+        self.workload_type_arr = ["test", "cp"]
         self.source_path = Path("/research2/mtc/cp_traces/pranav")
         self.trace_path = self.source_path.joinpath("block_traces/")
         self.sample_trace_path = self.source_path.joinpath("sample_block_traces/")
-
-        self.metadata_dir_path = self.source_path.joinpath("meta")
-        self.block_metadata_dir_path = self.metadata_dir_path.joinpath("block_features")
-        self.sample_metadata_dir_path = self.metadata_dir_path.joinpath("sample_split")
-
-        self.replay_metadata_dir_path = self.metadata_dir_path.joinpath("replay")
-        self.replay_metadata_dir_path.mkdir(exist_ok=True, parents=True)
-
-        self.replay_python_script_substring = "Replay.py"
-        self.replay_cachebench_binary_substring = "bin/cachebench"
-        self.workload_type_arr = ["test", "cp"]
-
-        self.remote_output_dir = "/run/replay"
-        self.replay_output_file_list = [
-            "{}/config.json".format(self.remote_output_dir),
-            "{}/usage.csv".format(self.remote_output_dir),
-            "{}/power.csv".format(self.remote_output_dir),
-            "{}/tsstat_0.out".format(self.remote_output_dir),
-            "{}/stat_0.out".format(self.remote_output_dir),
-            "{}/stdout.dump".format(self.remote_output_dir),
-            "{}/stderr.dump".format(self.remote_output_dir)
-        ]
+        self.block_feature_path = self.source_path.joinpath("meta/block_features")
+        self.sample_metadata_dir_path = self.source_path.joinpath("meta/sample_split/")
 
         self.fast24 = {
             "workloads": {
@@ -38,7 +19,7 @@ class Config:
                 "replay_rate_arr": [3, 2, 1],
                 "sample_rate_arr": [0.01, 0.05, 0.1, 0.2, 0.4, 0.8],
                 "bits_arr": [12, 8, 4, 0],
-                "seed_arr": [42, 43, 44],
+                "seed_arr": [42],
                 "cache_size_ratio_arr": [0.1, 0.2, 0.4, 0.6],
                 "sample_type": "iat",
                 "random_seed": 42, 
@@ -49,8 +30,7 @@ class Config:
                 "num_block_threads": 16,
                 "num_async_threads": 16,
                 "max_pending_block_requests": 128 
-            },
-            "machine_type_arr": ["c220g1", "c220g5", "r6525"]
+            }
         }
     
 

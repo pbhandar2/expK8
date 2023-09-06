@@ -1,53 +1,17 @@
-from json import loads 
-from threading import Thread
 from os import getenv
+from json import loads 
 from pathlib import Path 
+from threading import Thread
 from paramiko import SSHClient, AutoAddPolicy
 
-
-class BlockDeviceNotFound(Exception):
-    """Exception raised when a block device with a user specified name is not found in a remote node. """
-    def __init__(
-        self,
-        host_name: str, 
-        block_device_name: str,
-        block_device_name_list: list 
-    ) -> None:
-        super().__init__("Block devices with name {} not found in remote host {}. \
-            The remote host contains the following block devices: {}. \
-            ".format(block_device_name, host_name, block_device_name_list))
-
-
-class NoValidPartitionFound(Exception):
-    """Exception raised when no valid partition is found to create a FS on a partition of a specified size."""
-    def __init__(
-        self,
-        host_name: str, 
-        mount_info: dict, 
-        block_device_info: dict
-    ) -> None:
-        super().__init__("No valid partition found for info: {} in block device {} in host {}.".format(mount_info, block_device_info, host_name))
-
-
-class RemoteRuntimeError(Exception):
-    """Exception raised when the we receive a nonzero exit code from a remote process. """
-    def __init__(
-            self, 
-            remote_cmd: list,
-            host_name: str, 
-            exit_code: int, 
-            stdout: str,
-            stderr: str
-    ) -> None:
-        super().__init__("cmd: {} failed in host{} with exit code {} () \n stdout \n {} \n \
-            stderr \n {}".format(" ".join(remote_cmd), host_name, exit_code, stdout, stderr))
+from expK8.remoteFS.NodeException import BlockDeviceNotFound, NoValidPartitionFound, RemoteRuntimeError
 
 
 """According to channel documentation, the call to recv_exit_status can hang indefinitely 
 if the channel has not yet received any bytes from remote node where command was run. If we
 directly call recv(nbytes) and read bytes, we will corrupt the output while it would ensure 
-that recv_exit_status never hands. So we use a new thread to call exec_command and if it hands
-for a long time it can be killed. 
+that recv_exit_status never hands. So we use a new thread to call exec_command and if it takes too 
+long to finish it can be killed. 
 
 Ref: https://docs.paramiko.org/en/stable/api/channel.html (last checked 16/07/2023)
 """
@@ -75,7 +39,20 @@ class ExecCommandThread(Thread):
 
 
 class Node:
-    """Node represents a remote node that RemoteFS maintains a connection to."""
+    """This class allows communication with a remote node it is connected to.
+
+    Attributes:
+        name: Name of the node, not necessarily unique for remote nodes.  
+        host: Host name of the node, identifies a unique remote node. 
+        machine_name: Name of the type of machine used as node. 
+
+        _cred_dict: Dictionary of credentials.
+        _mount_list: List of valid mounts 
+        _port: Port used to connect to the remote node. 
+        _home: String path of home directoy. 
+        _ssh: SSHClient to connect to remote node. 
+        _ssh_exception: Exception raised when connectign to remote node. 
+    """
     def __init__(
             self,
             node_name: str,
@@ -95,6 +72,42 @@ class Node:
         self._ssh = None # SSH client to connect to remote host. 
         self._ssh_exception = None # Any exception raised when trying to connect to remote host. 
         self._connect()
+
+
+    def _connect(self) -> None:
+        """Connect to the remote host and setup all the mounts."""
+        try:
+            self._ssh = SSHClient()
+            self._ssh.set_missing_host_key_policy(AutoAddPolicy())
+            if self._cred_dict["type"] == "env":
+                self._ssh.connect(
+                    self.host, 
+                    self._port, 
+                    username=self._cred_dict["user"], 
+                    password=getenv(self._cred_dict["val"]))
+            else:
+                if "~" in self._cred_dict["val"]:
+                    key_path = str(Path.home().joinpath(self._cred_dict["val"].replace("~/", "")))
+                else:
+                    key_path = str(Path(self._cred_dict["val"]))
+                self._ssh.connect(self.host, username=self._cred_dict["user"], key_filename=key_path)
+            self._home = self._get_home_dir()
+            self._mount()
+        except Exception as e:
+            self._ssh_exception = e
+            print("Exception in connecting to node: {}, {}".format(self.host, e))
+
+
+    def set_perm_for_power_tracking(self):
+        """Set permissions in this node to allow for measuring of power usage."""
+        chmod_cmd = "sudo chmod -R a+r /sys/class/powercap/intel-rapl"
+        exit_code, stdout, stderr = self.exec_command(chmod_cmd.split(' '))
+        if exit_code:
+            raise RemoteRuntimeError(chmod_cmd, self.host, exit_code, stdout, stderr)
+    
+
+    def is_live(self):
+        return not self._ssh_exception
 
     
     def format_path(
@@ -667,34 +680,83 @@ class Node:
                 self.kill(pid)
                 ps_output.append(ps_row)
         return kill_list
+    
 
+    def find_all_files_in_dir(
+            self,
+            remote_dir_path: str 
+    ) -> list:
+        """Find all the files in this directory and all its subdirectories. 
 
+        Args:
+            remote_dir_path: Path of the remote directory to search. 
+        
+        Returns:
+            Array of absolute paths of files in the directory and its subdirectories. 
 
-    def _connect(self) -> None:
-        """Connect to the remote host and setup all the mounts. 
+        Raises:
+            RemoteRuntimeError: Raised if remote command failed. 
         """
-        try:
-            self._ssh = SSHClient()
-            self._ssh.set_missing_host_key_policy(AutoAddPolicy())
-            if self._cred_dict["type"] == "env":
-                self._ssh.connect(
-                    self.host, 
-                    self._port, 
-                    username=self._cred_dict["user"], 
-                    password=getenv(self._cred_dict["val"]))
-            else:
-                if "~" in self._cred_dict["val"]:
-                    key_path = str(Path.home().joinpath(self._cred_dict["val"].replace("~/", "")))
-                else:
-                    key_path = str(Path(self._cred_dict["val"]))
-                self._ssh.connect(self.host, username=self._cred_dict["user"], key_filename=key_path)
-            self._home = self._get_home_dir()
-            self._mount()
+        find_files_cmd = ["find", remote_dir_path, "-type", "f"]
+        stdout, stderr, exit_code = self.exec_command(find_files_cmd)
+        if exit_code:
+            raise RemoteRuntimeError(find_files_cmd, self.host, exit_code, stdout, stderr)
+        return stdout.rstrip().split("\n")
 
-            chmod_cmd = "sudo chmod -R a+r /sys/class/powercap/intel-rapl"
-            exit_code, stdout, stderr = self.exec_command(chmod_cmd.split(' '))
-            if exit_code:
-                raise ValueError("No intel power file found.")
-        except Exception as e:
-            self._ssh_exception = e
-            print("Exception in connecting to node: {}, {}".format(self.host, e))
+
+    def local_path_map(
+            self,
+            remote_data_file_path: Path,
+            remote_data_dir_path: Path,
+            local_data_dir_path: Path = Path("/research2/mtc/cp_traces/pranav")
+    ) -> Path:
+        """Get local file path from remote file path.
+        
+        Args:
+            remote_data_file_path: Path of data file in remote node. 
+            remote_data_dir_path: Path of remote data directory. 
+            local_data_dir_path: Path of local data directory. 
+        
+        Returns:
+            local_path: The local path that maps to the provided remote path. 
+        
+        Raises:
+            ValueError: Raised if the paths provided are not absolute, data directory is not part of the data file path
+                            and local data directory does not exist. 
+        """
+        if not remote_data_dir_path.is_absolute() or not remote_data_dir_path.is_absolute():
+            raise ValueError("All paths provided must be absolute. Paths -> {}, {}".format(remote_data_file_path, remote_data_dir_path))
+
+        remote_data_dir_absolute_str = str(remote_data_dir_path.absolute())
+        remote_data_file_path_absolute_str = str(remote_data_file_path.absolute())
+
+        if not remote_data_dir_absolute_str in remote_data_file_path_absolute_str:
+            raise ValueError("Remote file path {} does not contain remote data dir {}.".format(remote_data_file_path_absolute_str, remote_data_dir_absolute_str))
+
+        if not local_data_dir_path.exists():
+            raise ValueError("Local data directory {} does not exist.".format(local_data_dir_path))
+        
+        remote_file_path_subdir_str = remote_data_file_path_absolute_str.replace(remote_data_dir_absolute_str, '')
+        if remote_file_path_subdir_str[0] == '/':
+            remote_file_path_subdir_str = remote_file_path_subdir_str[1:]
+        return local_data_dir_path.joinpath(remote_file_path_subdir_str)
+    
+
+    def sync_dir(
+            self,
+            remote_dir_path: str, 
+            local_dir_path: str 
+    ) -> None:
+        remote_file_list = self.find_all_files_in_dir(remote_dir_path)
+        for remote_file_path in remote_file_list:
+            remote_data_path = Path(remote_file_path)
+            local_path = self.local_path_map(remote_data_path, Path(self.format_path(remote_dir_path)), local_data_dir_path=Path(local_dir_path))
+            
+            remote_file_size = self.get_file_size(remote_file_path)
+            local_file_size = local_path.stat().st_size if local_path.exists() else 0 
+            if remote_file_size != local_file_size:
+                print("Downloading {} to {} as file sizes are different {} vs {}.".format(remote_file_path, local_path, remote_file_size, local_file_size))
+                local_path.parent.mkdir(exist_ok=True, parents=True)
+                self.download(remote_file_path, local_path)
+            else:
+                print("File aready good {}, {}.".format(remote_file_path, local_path))

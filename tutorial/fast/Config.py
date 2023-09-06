@@ -10,7 +10,9 @@ class Config:
         self.metadata_dir_path = self.source_path.joinpath("meta")
         self.block_metadata_dir_path = self.metadata_dir_path.joinpath("block_features")
         self.sample_metadata_dir_path = self.metadata_dir_path.joinpath("sample_split")
+
         self.replay_metadata_dir_path = self.metadata_dir_path.joinpath("replay")
+        self.replay_metadata_dir_path.mkdir(exist_ok=True, parents=True)
 
         self.replay_python_script_substring = "Replay.py"
         self.replay_cachebench_binary_substring = "bin/cachebench"
@@ -36,7 +38,7 @@ class Config:
                 "replay_rate_arr": [3, 2, 1],
                 "sample_rate_arr": [0.01, 0.05, 0.1, 0.2, 0.4, 0.8],
                 "bits_arr": [12, 8, 4, 0],
-                "seed_arr": [42],
+                "seed_arr": [42, 43, 44],
                 "cache_size_ratio_arr": [0.1, 0.2, 0.4, 0.6],
                 "sample_type": "iat",
                 "random_seed": 42, 
@@ -47,7 +49,8 @@ class Config:
                 "num_block_threads": 16,
                 "num_async_threads": 16,
                 "max_pending_block_requests": 128 
-            }
+            },
+            "machine_type_arr": ["c220g1", "c220g5", "r6525"]
         }
     
 

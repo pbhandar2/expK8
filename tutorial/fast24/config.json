@@ -1,4 +1,16 @@
 {
+    "creds": {
+        "cloudlab": {
+            "user": "pbhandar",
+            "type": "file",
+            "val": "~/.ssh/id_ed25519"
+        },
+        "cloudlab_vishwa": {
+            "user": "vishwa",
+            "type": "file",
+            "val": "~/.ssh/id_ed25519"
+        }
+    },
     "mounts": {
         "c220g1": [
             {
@@ -20,21 +32,159 @@
             },
             {
                 "mountpoint": "~/nvm",
-                "device": "sda4",
-                "size_gb": 420 
+                "device": "sda",
+                "size_gb": 420
             }
         ]
     },
-    "creds": {
-        "cloudlab": {
-            "user": "pbhandar",
-            "type": "file",
-            "val": "/Users/pranavbhandari/.ssh/id_ed25519"
-        }
-    },
     "nodes": {
-        "c220g5-25": {
-            "host": "c220g5-120127.wisc.cloudlab.us",
+        "c220g5_node0": {
+            "host": "c220g5-120132.wisc.cloudlab.us",
+            "cred": "cloudlab",
+            "mount": "c220g5"
+        },
+        "c220g5_node1": {
+            "host": "c220g5-120116.wisc.cloudlab.us",
+            "cred": "cloudlab",
+            "mount": "c220g5"
+        },
+        "c220g5_node2": {
+            "host": "c220g5-110509.wisc.cloudlab.us",
+            "cred": "cloudlab",
+            "mount": "c220g5"
+        },
+        "c220g5_node3": {
+            "host": "c220g5-111004.wisc.cloudlab.us",
+            "cred": "cloudlab",
+            "mount": "c220g5"
+        },
+        "c220g5_node4": {
+            "host": "c220g5-120125.wisc.cloudlab.us",
+            "cred": "cloudlab",
+            "mount": "c220g5"
+        },
+        "c220g5_node5": {
+            "host": "c220g5-111003.wisc.cloudlab.us",
+            "cred": "cloudlab",
+            "mount": "c220g5"
+        },
+        "c220g5_node6": {
+            "host": "c220g5-111215.wisc.cloudlab.us",
+            "cred": "cloudlab",
+            "mount": "c220g5"
+        },
+        "c220g5_node7": {
+            "host": "c220g5-111226.wisc.cloudlab.us",
+            "cred": "cloudlab",
+            "mount": "c220g5"
+        },
+        "c220g5_node8": {
+            "host": "c220g5-111201.wisc.cloudlab.us",
+            "cred": "cloudlab",
+            "mount": "c220g5"
+        },
+        "c220g5_node9": {
+            "host": "c220g5-110501.wisc.cloudlab.us",
+            "cred": "cloudlab",
+            "mount": "c220g5"
+        },
+        "c220g5_node10": {
+            "host": "c220g5-120120.wisc.cloudlab.us",
+            "cred": "cloudlab",
+            "mount": "c220g5"
+        },
+        "c220g5_node11": {
+            "host": "c220g5-120110.wisc.cloudlab.us",
+            "cred": "cloudlab",
+            "mount": "c220g5"
+        },
+        "c220g5_node12": {
+            "host": "c220g5-110428.wisc.cloudlab.us",
+            "cred": "cloudlab",
+            "mount": "c220g5"
+        },
+        "c220g5_node13": {
+            "host": "c220g5-110422.wisc.cloudlab.us",
+            "cred": "cloudlab",
+            "mount": "c220g5"
+        },
+        "c220g5_node14": {
+            "host": "c220g5-111310.wisc.cloudlab.us",
+            "cred": "cloudlab",
+            "mount": "c220g5"
+        },
+        "c220g5_node15": {
+            "host": "c220g5-111221.wisc.cloudlab.us",
+            "cred": "cloudlab",
+            "mount": "c220g5"
+        },
+        "c220g5_node16": {
+            "host": "c220g5-110426.wisc.cloudlab.us",
+            "cred": "cloudlab",
+            "mount": "c220g5"
+        },
+        "c220g5_node17": {
+            "host": "c220g5-120121.wisc.cloudlab.us",
+            "cred": "cloudlab",
+            "mount": "c220g5"
+        },
+        "c220g5_node18": {
+            "host": "c220g5-120107.wisc.cloudlab.us",
+            "cred": "cloudlab",
+            "mount": "c220g5"
+        },
+        "c220g5_node19": {
+            "host": "c220g5-111318.wisc.cloudlab.us",
+            "cred": "cloudlab",
+            "mount": "c220g5"
+        },
+        "c220g5_node20": {
+            "host": "c220g5-110918.wisc.cloudlab.us",
+            "cred": "cloudlab",
+            "mount": "c220g5"
+        },
+        "c220g5_node21": {
+            "host": "c220g5-120115.wisc.cloudlab.us",
+            "cred": "cloudlab",
+            "mount": "c220g5"
+        },
+        "c220g5_node22": {
+            "host": "c220g5-111019.wisc.cloudlab.us",
+            "cred": "cloudlab",
+            "mount": "c220g5"
+        },
+        "c220g5_node23": {
+            "host": "c220g5-120105.wisc.cloudlab.us",
+            "cred": "cloudlab",
+            "mount": "c220g5"
+        },
+        "c220g5_node24": {
+            "host": "c220g5-110417.wisc.cloudlab.us",
+            "cred": "cloudlab",
+            "mount": "c220g5"
+        },
+        "c220g5_node25": {
+            "host": "c220g5-111011.wisc.cloudlab.us",
+            "cred": "cloudlab",
+            "mount": "c220g5"
+        },
+        "c220g5_node26": {
+            "host": "c220g5-110526.wisc.cloudlab.us",
+            "cred": "cloudlab",
+            "mount": "c220g5"
+        },
+        "c220g5_node27": {
+            "host": "c220g5-120122.wisc.cloudlab.us",
+            "cred": "cloudlab",
+            "mount": "c220g5"
+        },
+        "c220g5_node28": {
+            "host": "c220g5-120108.wisc.cloudlab.us",
+            "cred": "cloudlab",
+            "mount": "c220g5"
+        },
+        "c220g5_node29": {
+            "host": "c220g5-111331.wisc.cloudlab.us",
             "cred": "cloudlab",
             "mount": "c220g5"
         }

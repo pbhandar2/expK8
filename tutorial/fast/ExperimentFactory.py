@@ -112,7 +112,7 @@ class ExperimentFactory:
                     continue 
 
                 sample_t2_size_mb = int(sample_rate * experiment_info["t2_size_mb"])
-                if sample_t2_size_mb < self.exp_config["min_t2_size_mb"] or sample_t2_size_mb > self.exp_config["max_t2_size_mb"]:
+                if sample_t2_size_mb < self.exp_config["min_t2_size_mb"] or sample_t2_size_mb > self.exp_config["max_t2_size_mb"] or sample_t2_size_mb == 0:
                     continue 
 
                 sample_experiment_info = self.get_experiment_info_dict(
@@ -134,11 +134,12 @@ class ExperimentFactory:
                 block_trace_path = self.get_block_trace_path(workload_type, workload_name)
                 wss_mb, _, _ = self.get_wss_mb(workload_type, workload_name)
                 mt_experiment_arr = self.get_base_mt_experiments(str(block_trace_path.expanduser()), wss_mb, replay_rate)
+                experiment_arr += mt_experiment_arr
                 
-                for mt_experiment in mt_experiment_arr:
-                    experiment_arr.append(mt_experiment)
-                    sample_experiment_arr = self.get_sample_experiment(workload_type, workload_name, mt_experiment, sample_type)
-                    experiment_arr += sample_experiment_arr
+                # for mt_experiment in mt_experiment_arr:
+                #     experiment_arr.append(mt_experiment)
+                #     sample_experiment_arr = self.get_sample_experiment(workload_type, workload_name, mt_experiment, sample_type)
+                #     experiment_arr += sample_experiment_arr
 
         return experiment_arr
     

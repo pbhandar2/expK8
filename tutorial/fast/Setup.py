@@ -1,14 +1,33 @@
 from expK8.remoteFS.Node import Node, RemoteRuntimeError
 
 
-CACHELIB_TEST_CONFIG_FILE_PATH = "~/disk/CacheLib/cachelib/cachebench/test_configs/block_replay/sample_config.json"
+def is_dd_running(
+        node: Node,
+        file_path: str 
+) -> bool:
+    """Check if a file is being created using 'dd'. 
 
+    Args:
+        node: Node to be checked. 
+        file_path: The path of file being created. 
+    
+    Returns:
+        is_running: Boolean indicating if the file with the specified path is currently being created using 'dd'. 
+    """
+    is_running = False 
+    ps_stdout = node.ps()
+    for ps_row in ps_stdout.split('\n'):
+        if "dd" in ps_row and file_path in ps_row:
+            is_running = True 
+            break 
+    return is_running
+        
 
 def is_replay_running(node: Node) -> bool:
     """Check if replay is running in a node.
     
     Args:
-        node: Node where experiment might be running. 
+        node: Node to be checked. 
     
     Returns:
         running: Boolean indicating if trace replay is already running in the node. 
@@ -33,12 +52,55 @@ def is_replay_test_running(node: Node) -> bool:
     """
     running = False 
     ps_output = node.ps()
+    test_config_file_path = "~/disk/CacheLib/cachelib/cachebench/test_configs/block_replay/sample_config.json"
     for ps_row in ps_output.split('\n'):
-        if "bin/cachebench" in ps_row and CACHELIB_TEST_CONFIG_FILE_PATH in ps_row:
+        if "bin/cachebench" in ps_row and test_config_file_path in ps_row:
             running = True 
             break 
     return running
 
+
+def check_file(
+        node: Node,
+        file_path: str, 
+        desired_file_size_mb: int,
+        create_if_not_exists: bool = False,
+        mountpoint: str = ''
+) -> int:
+    """Check if a file is of the desired size. 
+    
+    Args:
+        node: Node to check. 
+        file_path: Path to check. 
+        desired_file_size_mb: Size of file in specified path in MB. 
+        create_if_not_exists: Boolean indicating if file creation should be started if needed. 
+        mountpoint: Path indicating whether mountpoint should be checked, '' means no need to check. 
+    
+    Returns:
+        file_status: Integer indicating file status. 
+    """
+    file_status = 0 
+
+    if len(mountpoint) > 0:
+        mount_info = node.get_mountpoint_info(mountpoint)
+        if not mount_info:
+            return file_status
+    
+    if is_dd_running(node, file_path):
+        file_status = -1 
+    else:
+        file_size_mb = node.get_file_size(file_path)//(1024*1024)
+        if file_size_mb < desired_file_size_mb:
+            if create_if_not_exists:
+                node.create_random_file_nonblock(file_path, desired_file_size_mb)
+                file_status = -1 
+            else: 
+                file_status = 2
+        else:
+            file_status = 1 
+    
+    return file_status
+    
 
 def check_storage_file(
     node: Node,
@@ -152,12 +214,13 @@ def install_cachebench(node: Node) -> None:
 
 def test_cachebench(node: Node):
     cachelib_dir = "~/disk/CacheLib"
+    test_config_file_path = "~/disk/CacheLib/cachelib/cachebench/test_configs/block_replay/sample_config.json"
     change_cachelib_dir = "cd {};".format(cachelib_dir)
     cachebench_binary_path = "./opt/cachelib/bin/cachebench"
     cachelib_cmd = "{} {} --json_test_config {}".format(
                     change_cachelib_dir,
                     cachebench_binary_path,
-                    CACHELIB_TEST_CONFIG_FILE_PATH)
+                    test_config_file_path)
 
     stdout, stderr, exit_code = node.exec_command(cachelib_cmd.split(' '))
     if exit_code:

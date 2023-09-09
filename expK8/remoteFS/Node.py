@@ -311,7 +311,7 @@ class Node:
     def cat(
         self, 
         path: str 
-        ) -> None:
+    ) -> str:
         """Read contents of a file in Node. 
 
             Args:
